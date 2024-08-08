@@ -1,0 +1,44 @@
+version: "1"
+
+package: 
+  id: io.github.ppsspp
+  name: ppsspp
+  version: 1.17.1.0
+  kind: app
+  description: |
+    A PSP emulator for Android, Windows, Mac and Linux, written in C++. Want to contribute? Join us on Discord at https://discord.gg/5NJB6dD or just send pull requests / issues. For discussion use the forums at forums.ppsspp.org.
+
+command:
+  - /opt/apps/io.github.ppsspp/files/bin/PPSSPPSDL
+
+base: org.deepin.foundation/23.0.0
+runtime: org.deepin.Runtime/23.0.1
+
+sources:
+  - kind: git
+    url: https://github.com/hrydgard/ppsspp.git
+    version: master
+    commit: c4076e359dd1b998342a09c8890c00b3e5ee30d1
+
+  - kind: git
+    url: https://github.com/libsdl-org/SDL.git
+    version: master
+    commit: 8f5d3ca57d610707cbc76582ffb6eb2b6a8904fc
+
+
+build: |
+ 
+  cd /project/linglong/sources/SDL.git
+  cmake -Bbuild \
+        -DCMAKE_INSTALL_PREFIX=${PREFIX} 
+    
+  cmake --build build -j$(nproc --all)
+  cmake --build build --target install  
+
+  cd /project/linglong/sources/ppsspp.git
+  cmake -Bbuild \
+        -DCMAKE_INSTALL_PREFIX=${PREFIX} 
+    
+  cmake --build build -j$(nproc --all)
+  cmake --build build --target install
+
